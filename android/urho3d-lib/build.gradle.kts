@@ -22,6 +22,7 @@
 
 import org.gradle.internal.io.NullOutputStream
 import org.gradle.internal.os.OperatingSystem
+import java.time.Duration
 
 plugins {
     id("com.android.library")
@@ -147,6 +148,12 @@ afterEvaluate {
                             docABI = abi
                         }
                     }
+                }
+            }
+            if (System.getenv("CI") != null) {
+                named<Task>("externalNativeBuild$config") {
+                    @Suppress("UnstableApiUsage")
+                    timeout.set(Duration.ofMinutes(25))
                 }
             }
         }
